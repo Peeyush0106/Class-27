@@ -1,14 +1,15 @@
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
+const Body = Matter.Body;
 const Constraint = Matter.Constraint;
 
 var engine, world;
 var box1, pig1;
 var backgroundImg, platform;
 
-var log6;
-var log6AndBird;
+// var log6;
+var birdJoint;
 
 function preload() {
     backgroundImg = loadImage("sprites/bg.png");
@@ -26,7 +27,7 @@ function setup() {
     box2 = new Box(920, 320, 70, 70);
     pig1 = new Pig(810, 350);
     log1 = new Log(810, 260, 300, PI / 2);
-    log6 = new Log(200, 100, 100, PI);
+    // log6 = new Log(200, 100, 100, PI);
 
     box3 = new Box(700, 240, 70, 70);
     box4 = new Box(920, 240, 70, 70);
@@ -39,21 +40,23 @@ function setup() {
     log5 = new Log(870, 120, 150, -PI / 7);
 
     bird = new Bird(100, 100);
-    log6AndBird = new Chain(log6.body, bird.body);
+    birdJoint = new Chain(bird.body, { x: 100, y: 100 });
 }
 
 function draw() {
     background(backgroundImg);
     Engine.update(engine);
-    console.log(box2.body.position.x);
-    console.log(box2.body.position.y);
-    console.log(box2.body.angle);
+    // console.log(box2.body.position.x);
+    // console.log(box2.body.position.y);
+    // console.log(box2.body.angle);
+
     box1.display();
     box2.display();
     ground.display();
     pig1.display();
     log1.display();
-    // log6AndBird.display();
+    
+    birdJoint.display();
 
     box3.display();
     box4.display();
@@ -63,8 +66,17 @@ function draw() {
     box5.display();
     log4.display();
     log5.display();
-    log6.display();
+    // log6.display();
 
     bird.display();
     platform.display();
+}
+
+function mouseDragged() {
+    Body.setPosition(bird.body, { x: mouseX, y: mouseY });
+    return false;
+}
+
+function mouseReleased() {
+    birdJoint.fly();
 }
